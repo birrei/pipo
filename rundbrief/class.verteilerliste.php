@@ -1,5 +1,5 @@
 <?php 
-require_once 'dbconn/class.db.php'; 
+require_once 'conn/class.db.php'; 
 
 class Verteilerliste {
     // Steht für einen Eintrag aus  Tabelle "verteilerlisten" 
@@ -14,13 +14,11 @@ class Verteilerliste {
 
     private $db; 
     
-    public function __construct(){
+    public function __construct($ID){
         $conn=new DBConnection(); 
         $this->db=$conn->db;    
 
-    }
-
-    public function setListe() {
+        $this->ID=$ID; 
 
         $query="SELECT ID, Tabelle, Beschreibung 
                 FROM verteilerlisten 
@@ -34,10 +32,10 @@ class Verteilerliste {
         $this->Tabelle = $row["Tabelle"]; 
         $this->Beschreibung = $row["Beschreibung"]; 
 
-    } 
+    }
 
-    public function readTable() {
-
+    public function getMitglieder(): array {
+        $tmpArrMitglieder=[]; 
         $query="SELECT Vorname, Nachname, Mailadresse 
                 FROM ".$this->Tabelle." 
                 WHERE Freigeschaltet=1  
@@ -47,15 +45,16 @@ class Verteilerliste {
         $select = $this->db->prepare($query); 
         $select->execute();
         $this->row_count=$select->rowCount(); 
-        $this->Mitglieder = $select->fetchAll(PDO::FETCH_ASSOC);   
+        $tmpArrMitglieder= $select->fetchAll(PDO::FETCH_ASSOC); 
+        return $tmpArrMitglieder; 
     }
+
 
     public function printTest() {
         echo '<p>'; 
         echo 'ID: '.$this->ID.'<br>';     
         echo 'Tabelle: '.$this->Tabelle.'<br>'; 
         echo 'Beschreibung: '.$this->Beschreibung.'<br>';     
-
         echo '</p>';  
 
 }
