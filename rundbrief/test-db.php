@@ -17,18 +17,16 @@ require_once 'class.verteilerliste.php';
 <h1> DB Test - Inhalte Tabelle Newsletter_test</h1>
 <?php 
 
-    $verteilerliste = new Verteilerliste();
-    $verteilerliste->ID = 3; // ID kommt später aus Auswahl. 3 = Newsletter_test 
-    $verteilerliste->setListe(); 
-    $verteilerliste->readTable(); 
+    $verteilerliste = new Verteilerliste(3); // Birgit Testadressen 
+    $Mitglieder = $verteilerliste->getMitglieder(); 
     // $verteilerliste->printTest(); 
 
     if($verteilerliste->row_count>0 ) {
-        foreach ($verteilerliste->Mitglieder as $row) {
+        foreach ($Mitglieder as $Mitglied) {
             echo '<p>'; 
-            echo $row["Vorname"].'<br>'; 
-            echo $row["Nachname"].'<br>';             
-            echo $row["Mailadresse"].'<br>'; 
+            echo $Mitglied["Vorname"].'<br>'; 
+            echo $Mitglied["Nachname"].'<br>';             
+            echo $Mitglied["Mailadresse"].'<br>'; 
             echo '</p>';             
         }
 

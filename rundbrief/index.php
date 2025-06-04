@@ -10,11 +10,20 @@
 </head>
 <body>
 
+
+
+
+<p><a href="test-classes.php">Test Klassen</a> </p>
+
+<p><a href="RundbriefVersenden.php">Rundbrief versenden</a> </p>
+
+<!-- 
+
+
 <p><a href="test-db.php">Test DB</a></p>
 
 <p><a href="test-mail3.php">Test Mail 3</a> </p>
 
-<!-- 
 <p><a href="test-mail-localhost-php-alt.php">Test Mail über localhost</a> (PHPMailer alt)  </p>
 
 <p><a href="test-mail-localhost-php-neu.php">Test Mail über localhost</a> (PHPMailer NEU) </p>

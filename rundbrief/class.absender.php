@@ -34,7 +34,7 @@ class Absender {
     
 
     public function printTest() {
-        echo '<p>'; 
+        echo '<p><b>Absender:</b><br> '; 
         echo 'ID: '.$this->ID.'<br>';     
         echo 'Mailadresse: '.$this->Mailadresse.'<br>'; 
         echo 'Alias: '.$this->Alias.'<br>';     

@@ -9,7 +9,7 @@ class Verteilerliste {
     public $OrderID; // verteilerliste.OrderID     
 
     // -----------------
-    public $Mitglieder; // die Daten aus [verteilerliste.Tabelle]
+    // public $Mitglieder; // die Daten aus [verteilerliste.Tabelle]
     public $row_count=0; // Anzahl Zeilen in [verteilerliste.Tabelle]
 
     private $db; 
@@ -34,7 +34,7 @@ class Verteilerliste {
 
     }
 
-    public function getMitglieder(): array {
+    public function getEmpfaenger(): array {
         $tmpArrMitglieder=[]; 
         $query="SELECT Vorname, Nachname, Mailadresse 
                 FROM ".$this->Tabelle." 
@@ -51,13 +51,23 @@ class Verteilerliste {
 
 
     public function printTest() {
-        echo '<p>'; 
+        echo '<p><b>Verteilerliste: </b><br>'; 
         echo 'ID: '.$this->ID.'<br>';     
         echo 'Tabelle: '.$this->Tabelle.'<br>'; 
-        echo 'Beschreibung: '.$this->Beschreibung.'<br>';     
+        echo 'Beschreibung: '.$this->Beschreibung.'<br>';    
+
+        $EmpfangerListe = $this->getEmpfaenger(); 
+
+        echo 'Empfänger in Verteilerliste "'.$this->Beschreibung.'": <br>'; 
+        foreach($EmpfangerListe as $Empfaenger) {
+            echo 'Vorname: '.$Empfaenger["Vorname"].', ';   
+            echo 'Nachname: '.$Empfaenger["Nachname"].', ';   
+            echo 'Mailadresse: '.$Empfaenger["Mailadresse"].'<br>';   
+        }        
+        
         echo '</p>';  
 
-}
+    }
 
 
 
