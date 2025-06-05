@@ -6,7 +6,6 @@ require_once '../phpmailer2/src/Exception.php';
 
 require_once 'conn/class.mailcreds.php'; 
 
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP; 
 use PHPMailer\PHPMailer\Exception;
@@ -17,31 +16,49 @@ use PHPMailer\PHPMailer\Exception;
 
 class Rundbrief {
 
-    // public $Betreff_Standard='';
-    // public $Mailtext_Standard='';
-
     public $Betreff='';
     public $Mailtext='';
     public $AbsenderMailadresse=''; 
     public $AbsenderAlias=''; 
-    public $Empfaengerliste=[]; 
-    public $UploadItems=[]; 
-    public $Anhaenge=[];
-    public $AnzahlAnhaenge;      
 
-    public $mitAnhang=true;  
+    public $NameVerteiler=''; 
+    public $Empfaengerliste=[]; // Enthält die Empfänger (Mailadesse, Vorname, Name)
+    public $AnzahlEmpfaenger=0; 
+    
+    public $UploadItems=[]; //  Upload-Elemente (Input-Elemente im Formular ) 
+    public $Anhaenge=[]; // Tatsächlich hinterlegte Datei-Anhänge 
+    public $AnzahlAnhaenge=0; 
+    public $AnzahlAnhaengeNichtPDF=0; //  fehler, wenn > 0          
+    public $OhneAnhang=false;  
+
+    public $AnzahlFehler=0; 
+    public $Fehlertext=''; 
+
+    public $versendet=false; 
 
     public function __construct(){
-        // $this->Betreff_Standard = $this->get_default_subject(); 
-        // $this->Mailtext_Standard = $this->get_default_message(); 
+        
+    }
+
+    public function loadProperties() {
+        // Parameter setzen, die nicht bei bei Programmaufruf gefüllt werden   
+        $this->Anhaenge = $this->getAnhaenge(); // setzt auch "$this->AnzahlAnhaenge", "this->AnzahlAnhaengeNichtPDF"
+        $this->AnzahlEmpfaenger = count($this->Empfaengerliste);
+        $this->AnzahlFehler = $this->getAnzahlFehler();  // Setzt auch "$this->Fehlertext"
     }
 
     public function Versenden() {
+
+        if($this->AnzahlFehler>0) {
+            $this->printError($this->Fehlertext); 
+            return; 
+        }
+
         $mail = new PHPMailer(true); 
         $creds = new Mailcreds(); 
 
         /************************************* */
-        $mail->SMTPDebug = 0; // SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->SMTPDebug = 0; // SMTP::DEBUG_SERVER; // XXX Enable verbose debug output
         $mail->isSMTP();                                       
         $mail->Host       = $creds->Host; 
         $mail->SMTPAuth   = true;          
@@ -49,8 +66,8 @@ class Rundbrief {
         $mail->Password   = $creds->Password;  
         $mail->SMTPSecure = $creds->SMTPSecure; 
         $mail->Port       = $creds->Port;  
-        // $mail->CharSet    ="UTF-8";
-        // $mail->SetLanguage('de');
+        $mail->CharSet    ="UTF-8";
+        $mail->SetLanguage('de');
 
         $mail->setFrom($this->AbsenderMailadresse, $this->AbsenderAlias);
         $mail->AddAddress($this->AbsenderMailadresse, $this->AbsenderAlias);
@@ -62,54 +79,54 @@ class Rundbrief {
         $mail->Subject = $this->Betreff;
         $mail->Body    = $this->Mailtext;
 
-
-        if($this->mitAnhang) {
-            $this->Anhaenge = $this->getAnhaenge(); 
-            if (count($this->Anhaenge)==0 ) {
-                $this->printError('Anhang fehlt!'); 
-                return; 
-            } else {
-                foreach ($this->Anhaenge as $index=>$datei) {
-                    $mail->AddAttachment($datei["tmp_name"], $datei["name"]);
-                    echo $datei["name"].' '.$datei["tmp_name"].'<br>';  // test 
-                }
-            }
+        foreach ($this->Anhaenge as $index=>$datei) {
+            $mail->AddAttachment($datei["tmp_name"], $datei["name"]);
+            // echo $datei["name"].' '.$datei["tmp_name"].'<br>';  // test 
         }
 
         try {
-            // $mail->send();
-            echo 'Message has been sent';
+            $mail->send();
+            $this->versendet=true;             
+            $this->printInfo('Die Mail wurde an '.$this->AnzahlEmpfaenger.' Empfänger versendet.' ); 
+            $this->printInfo('Verwendete Verteilerliste: '.$this->NameVerteiler);
+            $this->printInfo('Verwendete Absenderadresse: '.$this->AbsenderMailadresse);               
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $this->versendet=false;             
+            $this->printError('Die Mail konnte nicht versendet werden.'); 
+            $this->printError($mail->ErrorInfo); 
         } 
     }
 
+    public function getAnzahlAnhaenge() {
+        // Nicht verwendet, alternative Ermittlungsart, zum Verständnis ... 
+        $Anhaenge= array_filter($this->UploadItems["name"]);
+        return count($Anhaenge);  
+    }
+
     public function getAnhaenge(): array {
+        $Anhaenge = [];  
         $Uploads = $this->UploadItems;
         $anzahlUplads = count($Uploads['name']);
-        $tmpAnhaenge = []; 
 
         for ($i = 0; $i < $anzahlUplads; $i++) {
             $dateiname = $Uploads['name'][$i];
             if ($dateiname!='') {
                 $tmp_name = $Uploads['tmp_name'][$i];
-                $tmpAnhaenge[]=array('tmp_name'=>$tmp_name, 'name'=>$dateiname); 
-                // $fehlercode = $_FILES['datei']['error'][$i];
-                // $dateigrosse = $_FILES['datei']['size'][$i];
-                // $dateityp = $Uploads['type'][$i];
+                $Anhaenge[]=array('tmp_name'=>$tmp_name, 'name'=>$dateiname); 
+
+                if($Uploads['type'][$i]!='application/pdf') {
+                    $this->AnzahlAnhaengeNichtPDF+=1; 
+                }
+
+                // echo '<p>file tmp_name: '.$Uploads['tmp_name'][$i].'<br>';    
+                // echo 'file name: '.$Uploads['name'][$i].'<br>';                                
+                // echo 'file type: '.$Uploads['type'][$i].'<br>';
+                // echo 'file size: '.$Uploads['size'][$i].'<br>';
+                // echo 'file error: '.$Uploads['error'][$i].'<br>';                
             }
         }
-     
-        // echo 'Anzahl Anhaenge: '.count( $tmpAnhaenge).'<br>'; 
-        // print_r($tmpAnhaenge); 
-
-        // foreach ($tmpAnhaenge as $index=>$dateien) {
-        //     // echo  $Anhaenge[$index];
-        //     echo $dateien["name"];
-        //     echo $dateien["tmp_name"];  
-        // }
-
-        return $tmpAnhaenge; 
+        $this->AnzahlAnhaenge = count($Anhaenge); 
+        return $Anhaenge; 
     }
 
     public function get_default_subject() {
@@ -132,37 +149,102 @@ class Rundbrief {
     }
 
     public function printTest() {
-  
+        
+        /** Absender  */
         echo '<p>Absender Mailadresse: '.$this->AbsenderMailadresse.'<br>';    
         echo 'Absender Alias: '.$this->AbsenderAlias.'</p>';  
 
+        /** Empfänger  */      
+        echo 'Anzahl Empfänger: '.count($this->Empfaengerliste).'<br>';        
         echo '<p>Liste Empfänger: <br>'; 
-        $Empfaengerliste = $this->Empfaengerliste; 
-        foreach($Empfaengerliste as $Empfaenger) {
-            echo '* '.$Empfaenger["Vorname"].' '.$Empfaenger["Nachname"].' '.$Empfaenger["Mailadresse"].'<br>';
+        foreach($this->Empfaengerliste as $Empfaenger) {
+            echo '* Vorname: '.$Empfaenger["Vorname"].', Nachname: '.$Empfaenger["Nachname"].', Mailadresse: '.$Empfaenger["Mailadresse"].'<br>';
         }        
         echo '</p>'; 
-        
+
+        /** Anhänge *********** */
         echo '<p>Anhänge: <br>'; 
-   
-        $this->Anhaenge = $this->getAnhaenge(); 
-        
-        if ($this->mitAnhang & count($this->Anhaenge)==0) {
-            $this->printError('Fehler, kein Anhang!'); 
-        }  
-        foreach ($this->Anhaenge as $index=>$datei) {                            
-            echo 'name: '.$datei["name"].', tmp_name: '.$datei["tmp_name"].'<br>';  // test 
+        if($this->OhneAnhang) {
+            echo 'Option "ohne Anhang senden" wurde gewählt.<br>'; 
         }
-        
+        echo 'Anzahl Anhänge: '.$this->AnzahlAnhaenge.'<br>';   
+        echo '<p>Anhänge Auflistung: <br>'; 
+        // foreach ($this->Anhaenge as $index=>$datei) {            
+        foreach ($this->Anhaenge as $datei) {                            
+            echo '* name: '.$datei["name"].', tmp_name: '.$datei["tmp_name"].'<br>';  // test 
+        }
         echo '</p>'; 
 
+        /** Text  *********** */
         echo '<p>Betreff: '.$this->Betreff.'</p>';    
-        echo '<p>Mailtext: <pre>'.$this->Mailtext.'</pre></p>';          
+        echo '<p>Mailtext: <pre>'.$this->Mailtext.'</pre></p>'; 
+        
+        /** Fehler  *********** */
+        echo '<p><b>Fehler: </b><br>'; 
+        echo 'Anzahl Fehler: '.$this->AnzahlFehler.'<br>';   
+        echo 'Fehlertext: <br>';             
+        $this->printError($this->Fehlertext);
 
     }
 
+    public function printTest2() {
+        echo '<pre>';
+        echo 'Empfänger:'; 
+        print_r($this->Empfaengerliste);
+
+        echo 'Anhänge:';         
+        print_r($this->Anhaenge);  
+        echo '</pre>'; 
+
+    } 
+
+    public function getAnzahlFehler (): int {
+        $AnzahlFehler=0; 
+
+        If($this->Betreff=='') {
+            $this->Fehlertext.='Betreff fehlt! <br>'; 
+            $AnzahlFehler+=1; 
+        }
+        
+        If($this->Mailtext=='') {
+            $this->Fehlertext.='Mailtext fehlt! <br>';             
+            $AnzahlFehler+=1; 
+        }
+
+        If(count($this->Empfaengerliste)==0) {
+            $this->Fehlertext.='Die Empfängerliste ist leer. Prüfte bitte, ob du einen leeren Verteiler für den Versand gewählt hast<br>';             
+            $AnzahlFehler+=1; 
+        }  
+
+        If($this->AbsenderMailadresse=='') {
+            $this->Fehlertext.='Absenderadresse fehlt! <br>';             
+            $AnzahlFehler+=1; 
+        }        
+
+        if(!$this->OhneAnhang & $this->AnzahlAnhaenge==0) {
+            $this->Fehlertext.='Anhang fehlt! Falls kein Anhang versendet werden soll, bitte Option "Email ohne Anhang senden" aktivieren<br>';             
+            $AnzahlFehler+=1; 
+        }
+        if($this->OhneAnhang & $this->AnzahlAnhaenge>0) {
+            $this->Fehlertext.='Option "Ohne Anhang senden" wurde gewählt, jedoch Dateien wurden angehängt. Diese Kombination ist nicht möglich! <br>';             
+            $AnzahlFehler+=1; 
+        }
+        if($this->AnzahlAnhaengeNichtPDF>0) {
+            $this->Fehlertext.='Es dürfen nur PDF-Dateien angehängt werden! <br>';             
+            $AnzahlFehler+=1; 
+        }
+        // XXX nur PDF zulassen ! 
+            
+        return $AnzahlFehler; 
+        
+    }
+
     public function printError($text) {
-        echo '<p style="color:red">'.$text.'</p>'; 
+        echo '<p class="printerror">'.$text.'</p>'; 
+    } 
+
+    public function printInfo($text) {
+        echo '<p class="printinfo">'.$text.'</p>'; 
     } 
 
 }

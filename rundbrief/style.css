@@ -1,0 +1,18 @@
+body {
+        margin: 30px; 
+        font-family: Arial, Helvetica, sans-serif;
+}
+td {
+    vertical-align: top;
+    padding: 10px;  
+    background-color: lightgray;
+}
+input.text {
+    width: 500px;
+}
+p.printinfo {
+    color:black; 
+}
+p.printerror {
+    color:red; 
+}

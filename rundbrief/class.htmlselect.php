@@ -17,7 +17,7 @@ class HTMLSelect {
         $tmpItems=[]; 
         switch ($this->Name) {
             case 'AbsenderID': 
-                $query="SELECT ID, Beschreibung as `Name` 
+                $query="SELECT ID, concat(Mailadresse, ' - ',  Beschreibung) as `Name` 
                         FROM Mailadressen 
                         ORDER BY OrderID "; 
                 break; 
