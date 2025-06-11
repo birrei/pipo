@@ -13,6 +13,16 @@
 
 <p><a href="versand.php">Rundbrief versenden</a> </p>
 
+
+<p><b>Anleitungen:</b></p>
+<p>
+     Durchführung Versand - Anleitung folgt<br>
+<br><a href="Anleitung-Rundbrief_Nachsendung-Neumitglied.pdf">Nachsendung Neumitglied</a> 
+</p>
+
+
+
+
     
 </body>
 </html>
