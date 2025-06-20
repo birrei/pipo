@@ -143,7 +143,7 @@ class Rundbrief {
             "Hinweise: \n\n" . 
             "* Sie erhalten diesen Rundbrief, weil Sie sich mit der Mitgliedschaft bei Piano-Podium Karlsruhe e.V. für den Erhalt des Rundbriefs in elektronischer Form entschieden haben. Falls Sie diesen Rundbrief nicht länger erhalten möchten, genügt ein Hinweis an rundbrief@piano-podium.de, dann nehmen wir Sie aus dem Verteiler.\n\n" . 
             "* PDF-Dateien können in den meisten modernen Browsern direkt geöffnet und angezeigt werden. Sollte dies nicht möglich sein, muss ein Leseprogramm wie z.B. der Adobe Reader installiert sein. Sie können diesen, bei Bedarf, unter der folgenden Adresse herunterladen: http://www.adobe.com/de/products/acrobat/readstep2.html  \n\n" . 
-            "* Frühere Ausgaben des Piano-Podium Rundbriefs können online abgerufen werden unter: https://drive.google.com/drive/folders/0Bwrxc0rQO46yeEVjVWZGQXBFTlE?resourcekey=0-gZG-mjyWWijOiG7SAUd0Ow&usp=sharing \n" .
+            "* Frühere Ausgaben des Piano-Podium Rundbriefs können bei Bedarf gerne zur Verfügung gestellt werden. \n" .
             "";
         return $msg; 
     }
