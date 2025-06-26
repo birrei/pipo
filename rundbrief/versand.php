@@ -61,7 +61,7 @@ if(isset($_POST['versenden'])) {
 }
 ?>
 
-<form enctype="multipart/form-data" action="#" method="post" id="adminformular" accept-charset="UTF-8">
+<form enctype="multipart/form-data" action="" method="post" id="adminformular" accept-charset="UTF-8">
 <table class="Mailformular">
     <tr><td colspan="2"><h1> Rundbrief versenden </h1> </td></tr>
     <tr>
@@ -112,11 +112,9 @@ if(isset($_POST['versenden'])) {
 
 skipform: 
 
-
-
 ?>
 
-<p><a href="versand.php">Formular neu laden</a> | <a href="index.php">Startseite</a></p>
+<p><a href="">Formular neu laden</a>
 
 </body>
 </html>     

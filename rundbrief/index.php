@@ -11,8 +11,13 @@
 </head>
 <body>
 
-<p><a href="versand.php">Rundbrief versenden</a> </p>
+<!-- <p><a href="#">Rundbrief versenden</a> </p> -->
 
+<?php
+include 'versand.php'; 
+
+?>
+<!-- 
 <p>Anleitungen: </p>
 <p>
   <ul>
@@ -20,7 +25,7 @@
     <li><a href="Anleitung-Rundbrief_Nachsendung-Neumitglied.pdf">Nachsendung Neumitglied</a> (Entwurf)</li>
 
 </ul> 
-
+ -->
 
 
 <br> 
