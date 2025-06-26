@@ -17,21 +17,13 @@
 include 'versand.php'; 
 
 ?>
-<!-- 
-<p>Anleitungen: </p>
-<p>
-  <ul>
-    <li>Durchführung Versand (Anleitung folgt)</li> 
-    <li><a href="Anleitung-Rundbrief_Nachsendung-Neumitglied.pdf">Nachsendung Neumitglied</a> (Entwurf)</li>
-
-</ul> 
- -->
 
 
 <br> 
 </p>
 
 
+<hr>
 
 <p><a href="https://github.com/birrei/pipo" target="_blank">GitHub</a></p>
     

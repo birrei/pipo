@@ -24,6 +24,7 @@ $AbsenderID='';
 $VerteilerID=''; 
 
 $CheckOhneAnhang=''; // "checked" oder "" 
+$CheckEinzelversand='';
 
 if(isset($_POST['versenden'])) {
 
@@ -32,6 +33,7 @@ if(isset($_POST['versenden'])) {
     $Betreff=$_POST["Betreff"]; 
     $Mailtext=$_POST["Mailtext"]; 
     $CheckOhneAnhang=isset($_POST["OptionOhneAnhang"])?'checked':'';     
+    $CheckEinzelversand=isset($_POST["OptionEinzelversand"])?'checked':'';      
 
     $absender= new Absender($AbsenderID);
     // $absender->printTest(); 
@@ -50,7 +52,13 @@ if(isset($_POST['versenden'])) {
     $rundbrief->OhneAnhang = $CheckOhneAnhang=='checked'?true:false; 
     $rundbrief->UploadItems = $_FILES['datei']; // Anhänge 
     $rundbrief->loadProperties(); 
-    $rundbrief->Versenden(); 
+
+    if (!isset($_POST["OptionEinzelversand"])) {
+        $rundbrief->Versenden(); 
+    } else {
+        $rundbrief->Versenden2();         
+    }
+ 
 
     if($rundbrief->versendet) {
         goto skipform; 
@@ -103,7 +111,16 @@ if(isset($_POST['versenden'])) {
     </tr>
     <tr>
         <td></td>
-        <td><input type="submit" class="button" name="versenden" value="Rundbrief senden"/></td>
+        <td><input type="submit" class="button" name="versenden" value="Rundbrief senden"/> 
+        
+        &nbsp; &nbsp; &nbsp; &nbsp; 
+    
+        <input name="OptionEinzelversand" type="checkbox" <?php echo $CheckEinzelversand; ?>>Einzelversand (Test)
+            
+     
+        
+
+    </td>
     </tr>
     </table>
     </form>
