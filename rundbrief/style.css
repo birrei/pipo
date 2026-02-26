@@ -7,6 +7,9 @@ td {
     padding: 10px;  
     background-color: lightgray;
 }
+td1 {
+    font-weight: bold;
+}
 input.text {
     width: 500px;
 }
