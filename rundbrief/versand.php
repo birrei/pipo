@@ -113,11 +113,11 @@ if(isset($_POST['versenden'])) {
         <td class="td1"></td>
         <td><input type="submit" class="button" name="versenden" value="Rundbrief senden"/> 
         
-        &nbsp; &nbsp; &nbsp; &nbsp; 
+        <!-- &nbsp; &nbsp; &nbsp; &nbsp; 
     
         <input name="OptionEinzelversand" type="checkbox" <?php echo $CheckEinzelversand; ?>>Einzelversand (Test)
             
-     
+      -->
         
 
     </td>
@@ -133,7 +133,7 @@ skipform:
 
 <!-- <p><a href="">Formular neu laden</a> unnötig --> 
 
-<p> <a href="suche.php" target="_blank">Suche</a> </p>
+
 
 </body>
 </html>     

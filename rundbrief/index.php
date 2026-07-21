@@ -25,7 +25,15 @@ include 'versand.php';
 
 <hr>
 
-<p><a href="https://github.com/birrei/pipo" target="_blank">GitHub</a></p>
+<p>
+  
+<a href="https://github.com/birrei/pipo" target="_blank">GitHub</a>
+<a href="suche.php" target="_blank">Suche</a>
+
+
+</p>
+
+
     
 </body>
 </html>

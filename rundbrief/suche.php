@@ -19,7 +19,7 @@ require_once 'class.htmltable.php';
 
 ?>
 
-<form enctype="multipart/form-data" action="" method="post" id="adminformular" accept-charset="UTF-8">
+<form enctype="multipart/form-data" action="" method="GET" id="adminformular" accept-charset="UTF-8">
 
 <input type="text" class="text" name="Suchtext" value="<?php echo $Suchtext; ?>"/>
 
@@ -27,7 +27,10 @@ require_once 'class.htmltable.php';
 
 <?php 
 
-    $query="SELECT * FROM Newsletter WHERE 1=1 "; 
+    $query="SELECT ID, Vorname, Nachname, Mailadresse, Freigeschaltet, Bemerkung, Datum, 'Newsletter' as Tabelle   
+            FROM Newsletter 
+            WHERE 1=1 
+            "; 
 
     if($Suchtext!='') {
         $query.="AND (
@@ -37,6 +40,23 @@ require_once 'class.htmltable.php';
                 Bemerkung LIKE '%".$Suchtext."%' 
                 ) "; 
     }
+
+    $query.="UNION ALL 
+            SELECT ID, Vorname, Nachname, Mailadresse, Freigeschaltet, Bemerkung, Datum, 'Newsletter_disabled' as Tabelle    
+            FROM Newsletter_disabled 
+            WHERE 1=1 
+            ";     
+
+    if($Suchtext!='') {
+        $query.="AND (
+                Vorname LIKE '%".$Suchtext."%' OR 
+                Nachname LIKE '%".$Suchtext."%' OR 
+                Mailadresse LIKE '%".$Suchtext."%' OR 
+                Bemerkung LIKE '%".$Suchtext."%' 
+                ) "; 
+    }
+    
+    // echo $query; // test 
 
     $query.="ORDER BY Nachname, Vorname "; 
 
