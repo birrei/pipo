@@ -14,6 +14,7 @@ class HTMLSelect {
     }
 
     public function getItems(): array {
+        $query=''; 
         $tmpItems=[]; 
         switch ($this->Name) {
             case 'AbsenderID': 
