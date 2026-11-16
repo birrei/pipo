@@ -27,24 +27,24 @@ $Freigeschaltet=isset($_REQUEST['Freigeschaltet'])?$_REQUEST['Freigeschaltet']:'
 
 Verteiler: 
   <?php 
-  $verteilerlisten = new HTMLSelect('VerteilerID'); 
-  $verteilerlisten->printHTMLSelect($VerteilerID); 
+  $select_verteilerlisten = new HTMLSelect('VerteilerID'); 
+  $select_verteilerlisten->autosubmit=true; 
+  $select_verteilerlisten->printHTMLSelect($VerteilerID); 
   ?> 
 
-     Versand freigeschaltet: 
+    Versand freigeschaltet: 
     <select id="Freigeschaltet" name="Freigeschaltet" onchange="this.form.submit()" >
                 <option value="" <?php echo ($Freigeschaltet==''?'selected':'') ; ?>></option> 
                 <option value="1" <?php echo ($Freigeschaltet=='1'?'selected':'') ; ?>>Ja</option> 
                 <option value="0" <?php echo ($Freigeschaltet=='0'?'selected':'') ; ?>>Nein</option> 
     </select> 
 
-     Suchbegriff: <input type="text" class="text" name="Suchtext" size="10" value="<?php echo $Suchtext; ?>"/> 
+    Suchbegriff: <input type="text" name="Suchtext" size="10" value="<?php echo $Suchtext; ?>"/> 
 
-    <input type="submit" name="senden" value="Suche">
+<input type="submit" name="senden" value="Suche">
 
 </form>
 
-<br>
 
 
 <?php 
