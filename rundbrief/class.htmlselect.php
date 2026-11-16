@@ -3,6 +3,7 @@ require_once 'conn/class.db.php';
 
 class HTMLSelect {
     public $Name=''; 
+    public $autosubmit=false; 
     public $row_count=0; 
 
     private $db; 
@@ -39,7 +40,13 @@ class HTMLSelect {
 
     public function printHTMLSelect($selectedValue='') {
         $Items = $this->getItems(); 
-        $strSelect='<select name="'.$this->Name.'">'.PHP_EOL; 
+        
+        if($this->autosubmit) {
+            $strSelect='<select name="'.$this->Name.'" onchange="this.form.submit()" >'.PHP_EOL; 
+        } else {
+            $strSelect='<select name="'.$this->Name.'">'.PHP_EOL; 
+        }
+        
         if(count($Items)==0){
             $strSelect.='<option optionvalue="">(keine Daten vorhanden)</option>'.PHP_EOL;             
         } else {
