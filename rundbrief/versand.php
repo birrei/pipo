@@ -1,19 +1,10 @@
 <?php 
+$PageTitle='Versand'; 
+include 'head.php'; 
 require_once 'class.verteilerliste.php'; 
 require_once 'class.absender.php'; 
 require_once 'class.rundbrief.php'; 
 require_once 'class.htmlselect.php'; 
-?>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
-   <title>Rundbrief versenden</title>
-    <link rel='stylesheet' type='text/css' href='style.css'/>    
-
-   </head>
-<body>
-<?php 
-
 
 $rundbrief = new Rundbrief(); 
 
@@ -53,16 +44,10 @@ if(isset($_POST['versenden'])) {
     $rundbrief->UploadItems = $_FILES['datei']; // Anhänge 
     $rundbrief->loadProperties(); 
 
-    if (!isset($_POST["OptionEinzelversand"])) {
-        $rundbrief->Versenden(); 
-    } else {
-        $rundbrief->Versenden2();         
-    }
- 
 
-    if($rundbrief->versendet) {
-        goto skipform; 
-    }
+    $rundbrief->Versenden(); 
+    // $rundbrief->VersendenTest();   // test 
+
     // $rundbrief->printTest(); 
     // $rundbrief->printTest2(); 
 
@@ -107,17 +92,12 @@ if(isset($_POST['versenden'])) {
                 $Verteilerauswahl = new HTMLSelect('VerteilerID');
                 $Verteilerauswahl->printHTMLSelect($VerteilerID); 
             ?>
+            &nbsp; Verteilerlisten unter <a href="suche.php" target="_blank">Suche</a> anschauen.    
         </td>
     </tr>
     <tr>
         <td class="td1"></td>
         <td><input type="submit" class="button" name="versenden" value="Rundbrief senden"/> 
-        
-        <!-- &nbsp; &nbsp; &nbsp; &nbsp; 
-    
-        <input name="OptionEinzelversand" type="checkbox" <?php echo $CheckEinzelversand; ?>>Einzelversand (Test)
-            
-      -->
         
 
     </td>
@@ -129,11 +109,9 @@ if(isset($_POST['versenden'])) {
 
 skipform: 
 
+
+include 'foot.php'; 
+
 ?>
 
 <!-- <p><a href="">Formular neu laden</a> unnötig --> 
-
-
-
-</body>
-</html>     
