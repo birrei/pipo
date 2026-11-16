@@ -33,6 +33,7 @@ class Rundbrief {
 
     public $AnzahlFehler=0; 
     public $Fehlertext=''; 
+    public $Infotxt=''; 
 
     public $versendet=false; 
 
@@ -47,69 +48,46 @@ class Rundbrief {
         $this->AnzahlFehler = $this->getAnzahlFehler();  // Setzt auch "$this->Fehlertext"
     }
 
-    public function Versenden2() {
-        /*** Ein Email pro Empfänger, */
-        $InfoEmpfaengerOK=''; 
-        $InfoEmpfaengerFehler='';         
-        $anzahlVersandEmpfaenger=0; 
-        $anzahlVersandFehler=0; 
+    public function VersendenTest() {
+        // Ablauf wie "Versenden()", aber nur Parameter / INfo ausgeben (Versand wird nicht ausgeführt)  
 
         if($this->AnzahlFehler>0) {
             $this->printError($this->Fehlertext); 
             return; 
         }
 
-        $mail = new PHPMailer(true); 
-        $creds = new Mailcreds(); 
-
-        /************************************* */
-        $mail->SMTPDebug = 0; // SMTP::DEBUG_SERVER; // XXX Enable verbose debug output
-        $mail->isSMTP();                                       
-        $mail->Host       = $creds->Host; 
-        $mail->SMTPAuth   = true;          
-        $mail->Username   = $creds->Username; 
-        $mail->Password   = $creds->Password;  
-        $mail->SMTPSecure = $creds->SMTPSecure; 
-        $mail->Port       = $creds->Port;  
-        $mail->CharSet    ="UTF-8";
-        $mail->SetLanguage('de');
+        echo '<pre> **** Test Ausgabe ohne Versand **** '.PHP_EOL; 
+        echo 'Absender Mailadresse: '.$this->AbsenderMailadresse.PHP_EOL; 
+        echo 'Absender Alias: '.$this->AbsenderAlias.PHP_EOL; 
+        echo 'Betreff: '.$this->Betreff.PHP_EOL; 
+        echo 'Text: '.$this->Mailtext.PHP_EOL; 
         
-        foreach($this->Empfaengerliste as $Empfaenger) {
-            $anzahlVersandEmpfaenger+=1;
-            $mail->Subject = $this->Betreff;
-            $mail->Body    = $this->Mailtext;
-            $mail->setFrom($this->AbsenderMailadresse, $this->AbsenderAlias);            
-            $mail->AddAddress($Empfaenger["Mailadresse"], $Empfaenger["Vorname"].' '.$Empfaenger["Nachname"]);
-            foreach ($this->Anhaenge as $index=>$datei) {
-                $mail->AddAttachment($datei["tmp_name"], $datei["name"]);
-                // echo $datei["name"].' '.$datei["tmp_name"].'<br>';  // test 
-            }
+        echo 'Empfänger werden hinzugefügt (Methode AddBcc) ... '; 
                 
-            try {
-                $mail->send();
-                $InfoEmpfaengerOK.= date("d.m.Y H:i:s", time()).' - Versand an '.$Empfaenger["Mailadresse"].' abgeschlossen<br>';        
-        
-            } catch (Exception $e) {     
-                $anzahlVersandFehler+=1;     
-                $InfoEmpfaengerFehler.=date("d.m.Y H:i:s", time()).' - Versand an '.$Empfaenger["Mailadresse"].' fehlgeschlagen<br>';        
-                $InfoEmpfaengerFehler.=$mail->ErrorInfo.'<br>';        
-                // $this->printError('Die Mail konnte nicht an '.$Empfaenger["Mailadresse"].' versendet werden.'); 
-    
-            }
-            $mail->clearAddresses();         
+        // foreach($this->Empfaengerliste as $Empfaenger) {
+        //     // $mail->AddBcc($Empfaenger["Mailadresse"], $Empfaenger["Vorname"].' '.$Empfaenger["Nachname"]);
+        // }
+
+        echo 'Anhänge werden hinzugefügt: '.PHP_EOL; 
+        foreach ($this->Anhaenge as $index=>$datei) {
+            echo 'Datei tmp_name: '.$datei["tmp_name"].PHP_EOL;             
+            echo 'Datei name: '.$datei["name"].PHP_EOL;             
         }
 
-        $this->printInfo('Verwendete Verteilerliste: '.$this->NameVerteiler);
-        $this->printInfo('Verwendete Absenderadresse: '.$this->AbsenderMailadresse);   
-        $this->printInfo('Die Mail wurde an '.$this->AnzahlEmpfaenger.' Empfänger versendet.' );         
-        $this->printInfo($InfoEmpfaengerOK);      
-        if ($anzahlVersandFehler > 0 ) {
-            $this->printError($InfoEmpfaengerFehler);   
-            $this->versendet=false;             
-        }  else {
-            $this->versendet=true; 
-        }     
-    }
+        echo '<hr>'; 
+
+        $tstamp = date('d.m.Y H:i');           
+        $this->Infotxt=$tstamp.PHP_EOL; 
+        $this->Infotxt.='Die Mail wurde an '.$this->AnzahlEmpfaenger.' Empfänger versendet.'.PHP_EOL; 
+        $this->Infotxt.='Verwendete Verteilerliste: '.$this->NameVerteiler.PHP_EOL; 
+        $this->Infotxt.='Verwendete Absenderadresse: '.$this->AbsenderMailadresse.PHP_EOL; 
+        $this->printInfo( $this->Infotxt); 
+
+        echo '**** ENDE Test Ausgabe  **** </pre>'; 
+
+        $this->versendet = true; 
+
+    }    
 
     public function Versenden() {
         /**
@@ -154,16 +132,23 @@ class Rundbrief {
 
         try {
             $mail->send();
-            $this->versendet=true;             
-            $this->printInfo('Die Mail wurde an '.$this->AnzahlEmpfaenger.' Empfänger versendet.' ); 
-            $this->printInfo('Verwendete Verteilerliste: '.$this->NameVerteiler);
-            $this->printInfo('Verwendete Absenderadresse: '.$this->AbsenderMailadresse);               
+            $this->versendet=true;   
+
+            $tstamp = date('d.m.Y H:i');           
+            $this->Infotxt=$tstamp.PHP_EOL; 
+            $this->Infotxt.='<br>Die Mail wurde an '.$this->AnzahlEmpfaenger.' Empfänger versendet.'.PHP_EOL; 
+            $this->Infotxt.='<br>Verwendete Verteilerliste: '.$this->NameVerteiler.PHP_EOL; 
+            $this->Infotxt.='<br>Verwendete Absenderadresse: '.$this->AbsenderMailadresse.PHP_EOL; 
+            $this->printInfo( $this->Infotxt); 
+
         } catch (Exception $e) {
             $this->versendet=false;             
             $this->printError('Die Mail konnte nicht versendet werden.'); 
             $this->printError($mail->ErrorInfo); 
         } 
     }
+
+    
 
     public function getAnzahlAnhaenge() {
         // Nicht verwendet, alternative Ermittlungsart, zum Verständnis ... 
@@ -314,6 +299,73 @@ class Rundbrief {
     public function printInfo($text) {
         echo '<p class="printinfo">'.$text.'</p>'; 
     } 
+
+
+
+
+    public function Versenden2() {
+        /*** Ein Email pro Empfänger, sichtbar an Empfänger-Adresse  (nicht verwendet)  */
+        $InfoEmpfaengerOK=''; 
+        $InfoEmpfaengerFehler='';         
+        $anzahlVersandEmpfaenger=0; 
+        $anzahlVersandFehler=0; 
+
+        if($this->AnzahlFehler>0) {
+            $this->printError($this->Fehlertext); 
+            return; 
+        }
+
+        $mail = new PHPMailer(true); 
+        $creds = new Mailcreds(); 
+
+        /************************************* */
+        $mail->SMTPDebug = 0; // SMTP::DEBUG_SERVER; // XXX Enable verbose debug output
+        $mail->isSMTP();                                       
+        $mail->Host       = $creds->Host; 
+        $mail->SMTPAuth   = true;          
+        $mail->Username   = $creds->Username; 
+        $mail->Password   = $creds->Password;  
+        $mail->SMTPSecure = $creds->SMTPSecure; 
+        $mail->Port       = $creds->Port;  
+        $mail->CharSet    ="UTF-8";
+        $mail->SetLanguage('de');
+        
+        foreach($this->Empfaengerliste as $Empfaenger) {
+            $anzahlVersandEmpfaenger+=1;
+            $mail->Subject = $this->Betreff;
+            $mail->Body    = $this->Mailtext;
+            $mail->setFrom($this->AbsenderMailadresse, $this->AbsenderAlias);            
+            $mail->AddAddress($Empfaenger["Mailadresse"], $Empfaenger["Vorname"].' '.$Empfaenger["Nachname"]);
+            foreach ($this->Anhaenge as $index=>$datei) {
+                $mail->AddAttachment($datei["tmp_name"], $datei["name"]);
+                // echo $datei["name"].' '.$datei["tmp_name"].'<br>';  // test 
+            }
+                
+            try {
+                $mail->send();
+                $InfoEmpfaengerOK.= date("d.m.Y H:i:s", time()).' - Versand an '.$Empfaenger["Mailadresse"].' abgeschlossen<br>';        
+        
+            } catch (Exception $e) {     
+                $anzahlVersandFehler+=1;     
+                $InfoEmpfaengerFehler.=date("d.m.Y H:i:s", time()).' - Versand an '.$Empfaenger["Mailadresse"].' fehlgeschlagen<br>';        
+                $InfoEmpfaengerFehler.=$mail->ErrorInfo.'<br>';        
+                // $this->printError('Die Mail konnte nicht an '.$Empfaenger["Mailadresse"].' versendet werden.'); 
+    
+            }
+            $mail->clearAddresses();         
+        }
+
+        $this->printInfo('Verwendete Verteilerliste: '.$this->NameVerteiler);
+        $this->printInfo('Verwendete Absenderadresse: '.$this->AbsenderMailadresse);   
+        $this->printInfo('Die Mail wurde an '.$this->AnzahlEmpfaenger.' Empfänger versendet.' );         
+        $this->printInfo($InfoEmpfaengerOK);      
+        if ($anzahlVersandFehler > 0 ) {
+            $this->printError($InfoEmpfaengerFehler);   
+            $this->versendet=false;             
+        }  else {
+            $this->versendet=true; 
+        }     
+    }
 
 }
   
