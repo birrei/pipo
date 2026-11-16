@@ -18,7 +18,11 @@ class Verteilerliste {
         $conn=new DBConnection(); 
         $this->db=$conn->db;    
 
-        $this->ID=$ID; 
+        if($ID!='') {
+            $this->ID=$ID; 
+        } else {
+            $this->ID = $this->getDefaultVerteilerID();            
+        }
 
         $query="SELECT ID, Tabelle, Beschreibung 
                 FROM verteilerlisten 
@@ -28,11 +32,28 @@ class Verteilerliste {
         $select = $this->db->prepare($query); 
         $select->bindParam(':ID', $this->ID, PDO::PARAM_INT);        
         $select->execute();
+        // $select->debugDumpParams(); // test 
         $row=$select->fetch(PDO::FETCH_ASSOC);
         $this->Tabelle = $row["Tabelle"]; 
         $this->Beschreibung = $row["Beschreibung"]; 
 
     }
+
+    public function getDefaultVerteilerID() {
+        // der Verteiler mit der niedrigsten OrderID 
+        // entspr. der ersten angezeigten Liste im Select-Element  
+
+        $sql="SELECT MAX(ID)  
+            FROM verteilerlisten   
+            WHERE OrderID = (SELECT MIN(OrderID) max_OrderID  FROM verteilerlisten) 
+            "; 
+        $stmt = $this->db->prepare($sql); 
+        $stmt->execute(); 
+        $col=$stmt->fetchColumn(); 
+        $this->ID = $col; 
+        return $col;      
+    }
+
 
     public function getEmpfaenger(): array {
         $tmpArrMitglieder=[]; 
