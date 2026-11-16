@@ -11,17 +11,15 @@ class HTML_Table {
     private $count_cols; 
     private $count_rows; 
     
-
-    
     function __construct($query) {
 
-        // echo '<pre>'.$query.'</pre>'; 
+        // echo '<pre>'.$query.'</pre>'; // test 
         $conn=new DBConnection(); 
         $this->db=$conn->db;    
-
         $this->select = $this->db->prepare($query); 
         // $select->bindParam(':ID', $this->ID, PDO::PARAM_INT);        
         $this->select->execute(); 
+        // $this->select->debugDumpParams(); // test         
         $this->result = $this->select->fetchAll(PDO::FETCH_ASSOC);
         $this->count_cols=$this->select->columnCount(); 
         $this->count_rows=$this->select->rowCount(); 
@@ -65,6 +63,8 @@ class HTML_Table {
         
             </style>'. PHP_EOL;   
 
+            $html .= '<p>'.$this->count_rows.' Treffer</p>'; 
+                        
             $html.= '<table class="resultset">'. PHP_EOL;
 
             $html.= '<thead>'. PHP_EOL;
@@ -90,7 +90,7 @@ class HTML_Table {
                 $html .= '</tbody>'. PHP_EOL;   
             }
             $html .= '</table>'. PHP_EOL; 
-            $html .= '<p>'.$this->count_rows.' Treffer</p>'; 
+
         }
 
         echo $html;
