@@ -6,7 +6,7 @@ require_once 'class.htmlselect.php';
 require_once 'class.verteilerliste.php'; 
 ?>
 
-<h3>Suche</h3>
+<h3>Suche</h3><p> <a href="hilfe_suche.php" target="_blank">Hilfe</a></p> 
 
 <?php 
 
@@ -22,6 +22,8 @@ $Suchtext=isset($_REQUEST['Suchtext'])?$_REQUEST['Suchtext']:'';
 $Freigeschaltet=isset($_REQUEST['Freigeschaltet'])?$_REQUEST['Freigeschaltet']:''; 
 
 ?>
+
+
 
 <form enctype="multipart/form-data" action="" method="GET" id="adminformular" accept-charset="UTF-8">
 

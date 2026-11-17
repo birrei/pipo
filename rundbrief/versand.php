@@ -54,6 +54,8 @@ if(isset($_POST['versenden'])) {
 }
 ?>
 
+<p> <a href="hilfe_versand.php" target="_blank">Hilfe</a></p> 
+
 <form enctype="multipart/form-data" action="" method="post" id="adminformular" accept-charset="UTF-8">
 <table class="Mailformular">
     <tr><td colspan="2"><h3> Rundbrief versenden </h3> </td></tr>
