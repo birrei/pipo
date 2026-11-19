@@ -56,7 +56,7 @@ Siehe auch: <a href="https://help.dogado.de/hc/de/articles/22597257803409-Was-is
 
 <p style="color:red; font-weight:bold"> Es muss mindestens 1 Stunde abgewartet werden!  </p> 
 
-<!-- Vermutlich sind nicht Abstände, sondern fixe Zeitfenster massgeblich - das muss ich nochmal testen  -->
+<!-- Vermutlich sind nicht Abstände, sondern fixe Zeitfenster massgeblich - das muss ich nochmal prüfen  -->
 
 <p>Für den Folgeversand kann man vom vorherigen Versand 
   den Betreff, den Mailtext sowie den ausgewählten Absender stehen lassen.  
@@ -65,6 +65,8 @@ Siehe auch: <a href="https://help.dogado.de/hc/de/articles/22597257803409-Was-is
 
 <p>Ansonsten läuft alles ab wie beim ersten Versand. </p>
 
+<h2>Testausgabe</h2>
+<p>Parameter-Ausgabe als Text, es wird kein Versand durchgeführt (Nur zum Testen) </p>
 
 <?php
 include 'foot.php'; 

@@ -16,15 +16,16 @@ $VerteilerID='';
 
 $CheckOhneAnhang=''; // "checked" oder "" 
 $CheckEinzelversand='';
+$Testausgabe=false;      
 
 if(isset($_POST['versenden'])) {
-
     $AbsenderID=$_POST["AbsenderID"]; 
     $VerteilerID=$_POST["VerteilerID"]; 
     $Betreff=$_POST["Betreff"]; 
     $Mailtext=$_POST["Mailtext"]; 
     $CheckOhneAnhang=isset($_POST["OptionOhneAnhang"])?'checked':'';     
     $CheckEinzelversand=isset($_POST["OptionEinzelversand"])?'checked':'';      
+    $Testausgabe=isset($_POST["Testausgabe"])?true:false;      
 
     $absender= new Absender($AbsenderID);
     // $absender->printTest(); 
@@ -42,14 +43,10 @@ if(isset($_POST['versenden'])) {
 
     $rundbrief->OhneAnhang = $CheckOhneAnhang=='checked'?true:false; 
     $rundbrief->UploadItems = $_FILES['datei']; // Anhänge 
-    $rundbrief->loadProperties(); 
 
+    $rundbrief->Testausgabe=$Testausgabe; 
 
     $rundbrief->Versenden(); 
-    // $rundbrief->VersendenTest();   // test 
-
-    // $rundbrief->printTest(); 
-    // $rundbrief->printTest2(); 
 
 }
 ?>
@@ -104,16 +101,25 @@ if(isset($_POST['versenden'])) {
 
     </td>
     </tr>
+
+    <tr>
+        <td class="td1"></td>
+        <td align="right"> <input name="Testausgabe" type="checkbox" <?php echo $Testausgabe?'checked':''; ?>>Testausgabe<br>
+        
+
+    </td>
+    </tr>
+
     </table>
+
+               
+
     </form>
 
 <?php 
-
-skipform: 
 
 
 include 'foot.php'; 
 
 ?>
 
-<!-- <p><a href="">Formular neu laden</a> unnötig --> 
