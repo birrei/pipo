@@ -1,5 +1,5 @@
 <?php 
-$PageTitle='Hilfe Rundbrief-Versand'; 
+$PageTitle='Rundbrief-Versand Hilfe'; 
 include 'head.php'; 
 ?>
 
@@ -66,7 +66,7 @@ Siehe auch: <a href="https://help.dogado.de/hc/de/articles/22597257803409-Was-is
 <p>Ansonsten läuft alles ab wie beim ersten Versand. </p>
 
 <h2>Testausgabe</h2>
-<p>Parameter-Ausgabe als Text, es wird kein Versand durchgeführt (Nur zum Testen) </p>
+<p>Parameter-Ausgabe als Text, es wird kein Versand durchgeführt </p>
 
 <?php
 include 'foot.php'; 

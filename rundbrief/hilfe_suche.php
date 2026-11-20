@@ -3,7 +3,7 @@ $PageTitle='Hilfe Rundbrief-Versand';
 include 'head.php'; 
 ?>
 
-<h1>Suche Verwenden</h1> 
+<h1>Suche Hilfe</h1> 
 
 <p>Das Formular steht unter <a href="suche.php">Suche</a> zur Verfügung. </p>
 

@@ -50,12 +50,11 @@ if(isset($_POST['versenden'])) {
 
 }
 ?>
-
-<p> <a href="hilfe_versand.php" target="_blank">Hilfe</a></p> 
-
 <form enctype="multipart/form-data" action="" method="post" id="adminformular" accept-charset="UTF-8">
 <table class="Mailformular">
-    <tr><td colspan="2"><h3> Rundbrief versenden </h3> </td></tr>
+    <tr><td colspan="2"><h3   style="display:inline;"> Rundbrief versenden </h3> 
+        <a href="hilfe_versand.php" target="_blank" title="Hilfe im neuen Tab/Fenster öffnen">Hilfe</a>
+    </td></tr>
     <tr>
         <td class="td1">Anhänge (PDF): </td>
         <td>      <input name="datei[]" type="file" class="file"/> 
@@ -91,7 +90,7 @@ if(isset($_POST['versenden'])) {
                 $Verteilerauswahl = new HTMLSelect('VerteilerID');
                 $Verteilerauswahl->printHTMLSelect($VerteilerID); 
             ?>
-            &nbsp; Verteilerlisten unter <a href="suche.php" target="_blank">Suche</a> anschauen.    
+            &nbsp; Verteilerlisten unter <a href="suche.php" target="_blank" title="Suche im neuen Tab/Fenster öffnen">Suche</a> anschauen.    
         </td>
     </tr>
     <tr>

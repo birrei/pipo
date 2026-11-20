@@ -6,7 +6,9 @@ require_once 'class.htmlselect.php';
 require_once 'class.verteilerliste.php'; 
 ?>
 
-<h3>Suche</h3><p> <a href="hilfe_suche.php" target="_blank">Hilfe</a></p> 
+<h3 style="display:inline;">Suche</h3> <a href="hilfe_suche.php" target="_blank" title="Hilfe im neuen Tab/Fenster öffnen">Hilfe</a>
+
+<p></p>
 
 <?php 
 
