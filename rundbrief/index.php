@@ -9,6 +9,7 @@ include 'head.php';
 
 <h3>zur <a href="suche.php">Suche</a></h3> 
 
+<h3>zum <a href="sendlog.php">Versandlog</a></h3> 
 
 
 <?php

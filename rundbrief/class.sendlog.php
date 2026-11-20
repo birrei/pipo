@@ -11,7 +11,7 @@ class Sendlog {
   public string $Status;
   public int $AnzahlEmpfaenger;
   private $db; 
-  public int $ID; 
+  // public int $ID; // unnötig, da Tabelle nicht bearbeitet wird 
   public function __construct(){
     $conn=new DBConnection(); 
     $this->db=$conn->db;  
@@ -41,7 +41,7 @@ class Sendlog {
 
     try {
       $insert->execute(); 
-      $this->ID=$this->db->lastInsertId(); 
+      // $this->ID=$this->db->lastInsertId(); 
     }
       catch (PDOException $e) {
       echo '<pre>'; 
