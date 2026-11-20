@@ -16,7 +16,8 @@ $VerteilerID='';
 
 $CheckOhneAnhang=''; // "checked" oder "" 
 $CheckEinzelversand='';
-$Testausgabe=false;      
+$Testausgabe=false;     
+$Fehler=false;  
 
 if(isset($_POST['versenden'])) {
     $AbsenderID=$_POST["AbsenderID"]; 
@@ -27,26 +28,38 @@ if(isset($_POST['versenden'])) {
     $CheckEinzelversand=isset($_POST["OptionEinzelversand"])?'checked':'';      
     $Testausgabe=isset($_POST["Testausgabe"])?true:false;      
 
-    $absender= new Absender($AbsenderID);
-    // $absender->printTest(); 
+    if($AbsenderID=='') {
+         echo '<p class="printerror">Bitte Absender auswählen!</p>'; 
+        $Fehler=true; ; 
+    }
+    if($VerteilerID=='') {
+         echo '<p class="printerror">Bitte Verteiler auswählen!</p>'; 
+        $Fehler=true; ; 
+    }    
 
-    $verteilerliste = New Verteilerliste($VerteilerID);
-    // $verteilerliste->printTest(); 
+    if(!$Fehler) {
+        
+        $absender= new Absender($AbsenderID);
+        // $absender->printTest(); 
 
-    $rundbrief = new Rundbrief(); 
-    $rundbrief->Betreff = $Betreff; 
-    $rundbrief->Mailtext = $Mailtext; 
-    $rundbrief->AbsenderMailadresse = $absender->Mailadresse;
-    $rundbrief->AbsenderAlias = $absender->Alias; 
-    $rundbrief->Empfaengerliste = $verteilerliste->getEmpfaenger();
-    $rundbrief->NameVerteiler= $verteilerliste->Beschreibung; 
+        $verteilerliste = New Verteilerliste($VerteilerID);
+        // $verteilerliste->printTest(); 
 
-    $rundbrief->OhneAnhang = $CheckOhneAnhang=='checked'?true:false; 
-    $rundbrief->UploadItems = $_FILES['datei']; // Anhänge 
+        $rundbrief = new Rundbrief(); 
+        $rundbrief->Betreff = $Betreff; 
+        $rundbrief->Mailtext = $Mailtext; 
+        $rundbrief->AbsenderMailadresse = $absender->Mailadresse;
+        $rundbrief->AbsenderAlias = $absender->Alias; 
+        $rundbrief->Empfaengerliste = $verteilerliste->getEmpfaenger();
+        $rundbrief->NameVerteiler= $verteilerliste->Beschreibung; 
 
-    $rundbrief->Testausgabe=$Testausgabe; 
+        $rundbrief->OhneAnhang = $CheckOhneAnhang=='checked'?true:false; 
+        $rundbrief->UploadItems = $_FILES['datei']; // Anhänge 
 
-    $rundbrief->Versenden(); 
+        $rundbrief->Testausgabe=$Testausgabe; 
+
+        $rundbrief->Versenden(); 
+    }
 
 }
 ?>
@@ -78,6 +91,7 @@ if(isset($_POST['versenden'])) {
         <td>
             <?php 
                 $Absenderauswahl = new HTMLSelect('AbsenderID');
+                $Absenderauswahl->show_empty_row=true;                 
                 $Absenderauswahl->printHTMLSelect($AbsenderID); 
             ?>
         </td>
@@ -88,6 +102,7 @@ if(isset($_POST['versenden'])) {
         <td>
             <?php 
                 $Verteilerauswahl = new HTMLSelect('VerteilerID');
+                $Verteilerauswahl->show_empty_row=true; 
                 $Verteilerauswahl->printHTMLSelect($VerteilerID); 
             ?>
             &nbsp; Verteilerlisten unter <a href="suche.php" target="_blank" title="Suche im neuen Tab/Fenster öffnen">Suche</a> anschauen.    

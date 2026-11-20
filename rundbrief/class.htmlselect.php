@@ -4,6 +4,7 @@ require_once 'conn/class.db.php';
 class HTMLSelect {
     public $Name=''; 
     public $autosubmit=false; 
+    public $show_empty_row=false; 
     public $row_count=0; 
 
     private $db; 
@@ -50,6 +51,9 @@ class HTMLSelect {
         if(count($Items)==0){
             $strSelect.='<option optionvalue="">(keine Daten vorhanden)</option>'.PHP_EOL;             
         } else {
+            if ($this->show_empty_row) {
+                $strSelect.='<option value=""> </option>'.PHP_EOL;                 
+            }
             foreach($Items as $Item) {
                 if($selectedValue!='' & $selectedValue==$Item["ID"]) {
                     $strSelect.='<option value="'.$Item["ID"].'" selected>'.$Item["Name"].'</option>'.PHP_EOL; 

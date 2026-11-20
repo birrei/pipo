@@ -37,10 +37,15 @@ Siehe auch: <a href="https://help.dogado.de/hc/de/articles/22597257803409-Was-is
 <p>Der automatisch generierte Text kann bei Bedarf manuell  überschrieben werden</p>
 
 <h2>Absender auswählen</h2>
-<p>Auswahl der gewünschten Absender-Adresse </p>
+<p>Auswahl der gewünschten Absender-Adresse. 
+    <br>Beachte: Beim initialen Aufruf des Formulars ist die Auswahl leer, um einen unbeabsichtigten Versand zu vermeiden
+</p>
 
 <h2>Verteilerliste auswählen</h2>
-<p>Auswahl der gewünschten Verteilerliste </p>
+<p>Auswahl der gewünschten Verteilerliste. 
+  <br> Beachte: Beim initialen Aufruf des Formulars ist die Auswahl leer, um einen unbeabsichtigten Versand zu vermeiden
+</p>
+
 <p>Die zur Verfügung stehenden Verteilerlisten können unter <a href="suche.php">Suche</a> eingesehen und durchsucht werden. </p>
 
 <h2>Rundbrief senden (erster Versand)</h2>
@@ -54,7 +59,12 @@ Siehe auch: <a href="https://help.dogado.de/hc/de/articles/22597257803409-Was-is
 
 <h2>Rundbrief senden (erneuter Versand)</h2>
 
-<p style="color:red; font-weight:bold"> Es muss mindestens 1 Stunde abgewartet werden!  </p> 
+<p style="color:red;"> <b> Es muss mindestens 1 Stunde abgewartet werden!</b>. Anhand des Versandlogs kann man prüfen, wie lange 
+der vorherige Versand zurückliegt.  </p> 
+
+<p style="color:red;"> <b> Bitte beachten: Pro Stundenfenster können maximal 200 Emails versendet werden. </b>. Anhand des Versandlogs 
+kann man prüfen, zu welcher Uhrzeit der vorherige Versand erfolgt ist.  </p> 
+
 
 <!-- Vermutlich sind nicht Abstände, sondern fixe Zeitfenster massgeblich - das muss ich nochmal prüfen  -->
 

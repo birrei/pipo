@@ -1,5 +1,5 @@
 <?php 
-$PageTitle='Sendlog'; 
+$PageTitle='Versandlog'; 
 include 'head.php'; 
 require_once 'class.htmltable.php'; 
 require_once 'class.htmlselect.php'; 
